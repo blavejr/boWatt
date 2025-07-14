@@ -17,8 +17,8 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
-	// err := models.ConnectMongo("mongodb://mongo:27017")
-	err := models.ConnectMongo("mongodb://localhost:27017")
+	err := models.ConnectMongo("mongodb://mongo:27017")
+	// err := models.ConnectMongo("mongodb://localhost:27017")
 	if err != nil {
 		slog.Error("Failed to connect to MongoDB", "error", err)
 		os.Exit(1)
