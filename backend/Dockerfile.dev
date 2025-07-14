@@ -1,0 +1,14 @@
+# Dockerfile.dev
+FROM golang:1.24-alpine
+
+WORKDIR /app
+
+RUN go install github.com/air-verse/air@latest
+
+COPY .air.toml ./
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["air"]

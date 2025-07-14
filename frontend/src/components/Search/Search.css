@@ -1,0 +1,44 @@
+.search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+.search-input :focus {
+    border-color: red;
+    outline: none;
+}
+
+.snippet {
+  background: #f7faff;
+  border-left: 4px solid #3399ff;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+
+
+.search-container {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+input[type="file"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}

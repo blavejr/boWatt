@@ -1,0 +1,58 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  padding: 20px;
+  gap: 20px;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+  background-color: #ffe6e6;
+}
+
+.logout-button {
+  padding: 10px 16px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logout-button:hover {
+  background-color: #e04345;
+  transform: translateY(-1px);
+}
+
+.logout-button:active {
+  transform: scale(0.98);
+  background-color: #cc393b;
+}
+
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+}

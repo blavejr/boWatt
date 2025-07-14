@@ -1,0 +1,28 @@
+.upload-box {
+  width: 100%;
+  max-width: 250px;
+  max-height: 250px;
+  margin: 40px auto;
+  padding: 40px;
+  text-align: center;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.upload-box.drag-over {
+  border-color: #3399ff;
+  background-color: #eaf4ff;
+}
+
+.upload-box p {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.upload-box input[type="file"] {
+  padding: 8px;
+  font-size: 0.95rem;
+}
