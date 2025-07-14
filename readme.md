@@ -35,3 +35,25 @@ Basic user management is included a user can
 -  A user can upload as many files as they wish one after the other and they can select one at a time and search them
 -  we could upload the original file to a cms or aws bucket or something similar after upload
 - allow multi file uploads
+
+# Backend routes
+
+
+### Unprotected routes
+| Method | Endpoint  | Description       |
+| ------ | --------- | ----------------- |
+| GET    | `/ping`   | Health check      |
+| POST   | `/signup` | Register new user |
+| POST   | `/login`  | User login        |
+
+
+### Protected routes
+these routes require a header
+Authorization: <token>
+| Method | Endpoint   | Description            |
+| ------ | ---------- | ---------------------- |
+| GET    | `/profile` | Get user profile       |
+| GET    | `/files`   | List uploaded files    |
+| POST   | `/upload`  | Upload a file          |
+| POST   | `/query`   | Search content in file |
+
