@@ -3,39 +3,57 @@ package main
 import (
 	"os"
 
+	"log/slog"
+
 	"github.com/blavejr/bowattServer/controllers"
 	"github.com/blavejr/bowattServer/middleware"
 	"github.com/blavejr/bowattServer/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
-	"log/slog"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env
+	err := godotenv.Load()
+	if err != nil {
+		slog.Error("Error loading .env file", "error", err)
+	}
+
 	// Set up logger
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
-	err := models.ConnectMongo("mongodb://mongo:27017")
-	// err := models.ConnectMongo("mongodb://localhost:27017")
+	// Uncomment if you are not running in a docker env
+	// mongoURL := os.Getenv("DATABASE_URL_LOCAL")
+	mongoURL := os.Getenv("DATABASE_URL_DOCKER")
+	if mongoURL == "" {
+		slog.Error("DATABASE_URL not set")
+		os.Exit(1)
+	}
+
+	err = models.ConnectMongo(mongoURL)
 	if err != nil {
 		slog.Error("Failed to connect to MongoDB", "error", err)
 		os.Exit(1)
 	}
 
-	// TODO: load these dynamically from config
-	// For now, hardcoded for simplicity
+	// Get port from env
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	fileCollection := models.GetCollection("bowattDB", "files")
 	usersCollection := models.GetCollection("bowattDB", "users")
 	queriesCollection := models.GetCollection("bowattDB", "queries")
+
 	filesControllers := controllers.NewFilesHandler(fileCollection)
 	queriesControllers := controllers.NewQueriesHandler(queriesCollection, fileCollection)
 	usersControllers := controllers.NewUsersHandler(usersCollection)
 
 	router := gin.Default()
 
-	// Allow requests from localhost:3000
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
@@ -43,32 +61,24 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// test route
 	router.GET("/ping", func(c *gin.Context) {
 		slog.Info("Health ping received")
 		c.JSON(200, gin.H{"message": "pong"})
 	})
 
-	// Public routes
 	router.POST("/signup", usersControllers.CreateUser)
 	router.POST("/login", usersControllers.LoginUser)
 
-	// Protected routes group
 	router.Use(middleware.AuthMiddleware(usersCollection))
 	{
-		// Protected User routes
 		router.GET("/profile", func(c *gin.Context) {
 			user := c.MustGet("user").(models.User)
 			c.JSON(200, gin.H{"username": user.Username, "created_at": user.CreatedAt})
 		})
-
-		// Protected File routes
 		router.POST("/upload", filesControllers.HandleFileUpload)
 		router.GET("/files", filesControllers.ListFilesForUser)
-
-		// Query routes
 		router.POST("/query", queriesControllers.HandleQuery)
 	}
 
-	router.Run(":8080")
+	router.Run(":" + port)
 }
