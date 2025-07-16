@@ -4,7 +4,7 @@ import Search from "./Search";
 describe("Search Component", () => {
   it("renders input and responds to typing", () => {
     const mockOnSearch = jest.fn();
-    render(<Search onSearch={mockOnSearch} snippets={[]} />);
+    render(<Search value="testing" onSearch={mockOnSearch} snippets={[]} />);
 
     const input = screen.getByPlaceholderText("Search...");
 
@@ -15,13 +15,13 @@ describe("Search Component", () => {
   });
 
   it("displays 'No results' when snippets is empty", () => {
-    render(<Search onSearch={() => {}} snippets={[]} />);
+    render(<Search value="testing" onSearch={() => {}} snippets={[]} />);
     expect(screen.getByText("No results")).toBeInTheDocument();
   });
 
   it("renders provided snippets", () => {
     const snippets = ["Line 1", "Line 2"];
-    render(<Search onSearch={() => {}} snippets={snippets} />);
+    render(<Search value="testing" onSearch={() => {}} snippets={snippets} />);
 
     snippets.forEach((snippet) => {
       expect(screen.getByText(snippet)).toBeInTheDocument();

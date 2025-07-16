@@ -109,3 +109,28 @@ export async function listFiles(): Promise<string[]> {
   console.log("Files:", data);
   return data;
 }
+
+export interface IQueryHistory {
+  "ID": string,
+  "Query": string,
+  "FileHash": string,
+  "UserId": string,
+  "Timestamp": number
+}
+
+export async function getQueryHistory(): Promise<IQueryHistory[]>{
+  const res = await fetch(`${BASE_URL}/query/history`, {
+    method: "GET",
+    headers: {
+      "Authorization": `${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Failed to get query history");
+  }
+
+  const data = await res.json();
+  return data;
+}
