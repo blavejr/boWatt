@@ -84,7 +84,7 @@ function Home() {
           )}
           <p>Selected File: {FileHash || "None"}</p>
         </div>
-        <FileUploader onUpload={handleUpload} />
+        <FileUploader onUpload={handleUpload} setError={setError} />
         <button className="logout-button" onClick={()=>{
           localStorage.removeItem('token');
           navigate('/login')
