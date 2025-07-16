@@ -37,7 +37,7 @@ Here’s a high-level overview of its structure and responsibilities:
 
 - **Location:** `middleware/auth.go`
 - **Responsibilities:**
-  - Auth middleware checks for a valid token in `Authorization` header
+  - Auth middleware checks for a valid token in `Authorization` header, I use a simple token but I could use JWT tokens that expires and a second refresh token in the http-only cookie, the refresh token will be much longer living the the Bearer token and will be used to reauthenticate and generate a new token for the user
   - Loads user from DB and attaches to request context for use in controllers
 
 ---
@@ -96,3 +96,7 @@ Here’s a high-level overview of its structure and responsibilities:
 - Handled via `files.go` and `queries.go`
 - Files hashed, deduplicated, and stored in MongoDB
 - Search uses fuzzy matching and results are cached
+
+## Deployments
+Though I only imagine this app will only ever live on local computers I can think up how it could be deployed.
+Ideally I would go with a CI/CD approach, this would require that tests are written to enable automatic build and deployment with each commit/merge to a master branch. something like gitlab CI or github actions could be used here, the pipeline would checkout the code, build it and run the tests, if all passes, we could push the container into a registry before checking it out and deploying it onto the available infra.

@@ -25,8 +25,8 @@ func main() {
 	slog.SetDefault(logger)
 
 	// Uncomment if you are not running in a docker env
-	mongoURL := os.Getenv("DATABASE_URL_LOCAL")
-	// mongoURL := os.Getenv("DATABASE_URL_DOCKER")
+	// mongoURL := os.Getenv("DATABASE_URL_LOCAL")
+	mongoURL := os.Getenv("DATABASE_URL_DOCKER")
 	if mongoURL == "" {
 		slog.Error("DATABASE_URL not set")
 		os.Exit(1)
