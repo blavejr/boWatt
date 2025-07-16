@@ -32,7 +32,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "b5b1b7be-a6dc-459d-a1e8-47595ee04392",
+						"value": "7c6ce025-f6d5-4c25-bbff-65bce4700989",
 						"type": "text"
 					}
 				],
@@ -57,13 +57,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "411fd181-f9df-4ace-a2d8-4c21a41ee26c",
+						"value": "7c6ce025-f6d5-4c25-bbff-65bce4700989",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"FileHash\":\"daae7bb87d026c0bfb1cce764bdbd9b28bc4eb88b5f328daf93c77087b5922cc\",\n\"query\":\"part\"\n}",
+					"raw": "{\n    \"FileHash\":\"2966ad1f5737fe9b93ae8b2ca1a4fcaea26033d75902376e64c0e85eb9cf9a07\",\n\"query\":\"part\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -79,6 +79,44 @@
 					"port": "8080",
 					"path": [
 						"query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/query/history",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "7c6ce025-f6d5-4c25-bbff-65bce4700989",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"FileHash\":\"2966ad1f5737fe9b93ae8b2ca1a4fcaea26033d75902376e64c0e85eb9cf9a07\",\n\"query\":\"part\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/query/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"query",
+						"history"
 					]
 				}
 			},
@@ -152,7 +190,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "5b4152d1-f99f-41e5-a297-f949078567fb",
+						"value": "77d6023a-5c07-4a4d-ba3b-543c36bbbbbc",
 						"type": "text"
 					}
 				],
@@ -173,7 +211,7 @@
 					"query": [
 						{
 							"key": "Authorization",
-							"value": "411fd181-f9df-4ace-a2d8-4c21a41ee26c",
+							"value": "77d6023a-5c07-4a4d-ba3b-543c36bbbbbc",
 							"disabled": true
 						}
 					]

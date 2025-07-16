@@ -3,11 +3,13 @@ package controllers
 import (
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/blavejr/bowattServer/models"
 	"github.com/blavejr/bowattServer/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -64,5 +66,39 @@ func (handler *QueriesHandler) HandleQuery(c *gin.Context) {
 	snippets := utils.FuzzySearch(content, req.Query)
 	utils.SetCachedQuery(cacheKey, snippets)
 
+	// save query metadata into db for history
+	record := models.QueryHistory{
+		ID:        primitive.NewObjectID(),
+		Query:     req.Query,
+		UserId:    user.ID,
+		FileHash:  req.FileHash,
+		Timestamp: time.Now().Unix(),
+	}
+
+	_, err = handler.QueriesCollection.InsertOne(c, record)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "DB insert failed", "status": http.StatusInternalServerError})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"results": snippets, "status": http.StatusOK})
+}
+
+func (handler *QueriesHandler) QueryHistoryForUser(c *gin.Context) {
+	user := c.MustGet("user").(models.User)
+
+	cursor, err := handler.QueriesCollection.Find(c, bson.M{"user_id": user.ID})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch history", "status": http.StatusInternalServerError})
+		return
+	}
+	defer cursor.Close(c)
+
+	var queryHistory []models.QueryHistory
+	if err := cursor.All(c, &queryHistory); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode history", "status": http.StatusInternalServerError})
+		return
+	}
+
+	c.JSON(http.StatusOK, queryHistory)
 }
