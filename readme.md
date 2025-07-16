@@ -12,7 +12,7 @@ you will get 3 containers
 - Mongo database
 
 All parts of the application are dockerized and can be orchestrated with docker-compose, `docker-compose up --build` gets you started
-Files are uploaded one at a time, contents are extracted and saved in a mongodb, the entire file is hashed and this hash is what is used to detect duplicate files, preventing users from submitting the same file over and over again, different users may upload the same file.
+Files are uploaded one at a time, contents are extracted and saved in a mongodb, the entire file is hashed and this hash is what is used to detect duplicate files, preventing users from submitting the same file over and over again, but allowing them to upload files with subtle changes, different users may upload the same file.
 
 - user management used a basic token (simple UUID) I could have gone with something more complex such as jwt but the basic principals are the same and I wanted to keep things simple but functional as this is just a one time use demo application
 
@@ -57,3 +57,5 @@ Authorization: <token>
 | POST   | `/upload`  | Upload a file          |
 | POST   | `/query`   | Search content in file |
 
+# Architecture
+To keep it simple I have gone with a basic implementation of the MVC architecture, models, views and controller, for a more complex programs I would recommend going with onion/ports and adapters as its much more adaptable, 

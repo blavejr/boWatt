@@ -161,3 +161,26 @@ Authorization: <token>
     ]
 }
 ```
+
+---
+
+### `GET /query/history`
+
+Query the searches of a user from a file (requires auth).
+**Headers**:
+
+```
+Authorization: <token>
+```
+
+```json
+[
+    {
+        "ID": "687747587bf8a334178f1a88",
+        "Query": "part",
+        "FileHash": "2966ad1f5737fe9b93ae8b2ca1a4fcaea26033d75902376e64c0e85eb9cf9a07",
+        "UserId": "6874fe3f1316ef1490e85d4f",
+        "Timestamp": 1752647512
+    }
+]
+```
