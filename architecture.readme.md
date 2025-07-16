@@ -97,6 +97,9 @@ Here’s a high-level overview of its structure and responsibilities:
 - Files hashed, deduplicated, and stored in MongoDB
 - Search uses fuzzy matching and results are cached
 
-## Deployments
+### Validation
+I did not get to adding validation to the routes but this would be a good improvement, validation on both the frontend input, backend routes and on the database writes, simply to sanitize data and make sure that everything is getting what it needs in the shape that it needs it in.
+
+### Deployments
 Though I only imagine this app will only ever live on local computers I can think up how it could be deployed.
 Ideally I would go with a CI/CD approach, this would require that tests are written to enable automatic build and deployment with each commit/merge to a master branch. something like gitlab CI or github actions could be used here, the pipeline would checkout the code, build it and run the tests, if all passes, we could push the container into a registry before checking it out and deploying it onto the available infra.
