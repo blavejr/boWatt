@@ -27,7 +27,7 @@ func (handler *UsersHandler) CreateUser(c *gin.Context) {
 	}
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input", "status": http.StatusBadRequest})
 		return
 	}
 
@@ -38,14 +38,14 @@ func (handler *UsersHandler) CreateUser(c *gin.Context) {
 		Decode(&existing)
 
 	if err == nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Username already taken"})
+		c.JSON(http.StatusConflict, gin.H{"error": "Username already taken", "status": http.StatusConflict})
 		return
 	}
 
 	// Hash the password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password", "status": http.StatusInternalServerError})
 		return
 	}
 
@@ -58,13 +58,14 @@ func (handler *UsersHandler) CreateUser(c *gin.Context) {
 
 	_, err = handler.UserCollection.Database().Collection("users").InsertOne(c, user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not create user", "status": http.StatusInternalServerError})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "User created",
 		"token":   user.Token,
+		"status":  http.StatusOK,
 	})
 }
 
@@ -85,13 +86,13 @@ func (handler *UsersHandler) LoginUser(c *gin.Context) {
 		Decode(&user)
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password", "status": http.StatusUnauthorized})
 		return
 	}
 
 	// Compare password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password", "status": http.StatusUnauthorized})
 		return
 	}
 
@@ -104,12 +105,13 @@ func (handler *UsersHandler) LoginUser(c *gin.Context) {
 		)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update token", "status": http.StatusInternalServerError})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",
 		"token":   newToken,
+		"status":  http.StatusOK,
 	})
 }

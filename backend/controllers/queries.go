@@ -32,7 +32,7 @@ func (handler *QueriesHandler) HandleQuery(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		slog.Error("Invalid request", "error", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "status": http.StatusBadRequest})
 		return
 	}
 
@@ -48,7 +48,7 @@ func (handler *QueriesHandler) HandleQuery(c *gin.Context) {
 
 	if err != nil {
 		slog.Warn("File not found by hash", "fileHash", req.FileHash)
-		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "File not found", "status": http.StatusNotFound})
 		return
 	}
 
@@ -57,12 +57,12 @@ func (handler *QueriesHandler) HandleQuery(c *gin.Context) {
 	cacheKey := req.FileHash + ":" + req.Query
 	if cached, found := utils.GetCachedQuery(cacheKey); found {
 		slog.Info("Returning cached results", "cacheKey", cacheKey)
-		c.JSON(http.StatusOK, gin.H{"results": cached})
+		c.JSON(http.StatusOK, gin.H{"results": cached, "status": http.StatusOK})
 		return
 	}
 
 	snippets := utils.FuzzySearch(content, req.Query)
 	utils.SetCachedQuery(cacheKey, snippets)
 
-	c.JSON(http.StatusOK, gin.H{"results": snippets})
+	c.JSON(http.StatusOK, gin.H{"results": snippets, "status": http.StatusOK})
 }

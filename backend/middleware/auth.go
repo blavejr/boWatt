@@ -14,14 +14,14 @@ func AuthMiddleware(userColl *mongo.Collection) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 		if token == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing token", "status": http.StatusUnauthorized})
 			return
 		}
 
 		var user models.User
 		err := userColl.FindOne(c, bson.M{"token": token}).Decode(&user)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "status": http.StatusUnauthorized})
 			return
 		}
 
