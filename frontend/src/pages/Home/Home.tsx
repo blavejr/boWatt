@@ -48,9 +48,21 @@ function Home() {
     });
   };
 
+  const handleFileSelection = (_fileHash: string) => {
+    setError(null)
+    setSnippets([])
+    setFileHash(_fileHash)
+  }
+
   const handleSearch = async (query: string) => {
     if (!FileHash) {
-      setError('Please upload or select a file to search in')
+      setError('Please upload or select a file to search in');
+      return;
+    }
+
+    if (!query || query.length === 0) {
+      setSnippets([]);
+      setError(null);
       return;
     }
 
@@ -58,10 +70,13 @@ function Home() {
       const results = await queryFile(FileHash, query);
       setSnippets(results);
       if (results.length === 0) setError("No results found.");
+      else setError(null);
     } catch (err) {
       console.error("Search error:", err);
+      setError("An error occurred while searching.");
     }
   };
+
 
   return (
     <div className="App">
@@ -85,7 +100,7 @@ function Home() {
           <p>Selected File: {FileHash || "None"}</p>
         </div>
         <FileUploader onUpload={handleUpload} setError={setError} />
-        <button className="logout-button" onClick={()=>{
+        <button className="logout-button" onClick={() => {
           localStorage.removeItem('token');
           navigate('/login')
         }}> Logout </button>
@@ -100,7 +115,7 @@ function Home() {
         <FileList
           files={userFiles ?? []}
           selectedFile={FileHash}
-          onSelect={setFileHash}
+          onSelect={handleFileSelection}
         />
       </div>
     </div>
