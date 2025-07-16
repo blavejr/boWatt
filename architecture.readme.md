@@ -109,4 +109,6 @@ The in-memory cache would be replaced with a more robust persistant cache like r
 
 for inter service communication I would use events and some kind of message broker like RabbitMQ or Kafka, this way services can go about their business and not have to worry about the others, once a service completes its job it simply sends an event to the broker notifying the next service where continue, how to get the data etc, files can be queued for hashing and even further processing to enhance the searchability
 
-I would also include observability tools on both the back and frontend to log errors such as datadog or sentry and something like pagerduty to notify the team when things go wrong in production 
+I would also include observability tools on both the back and frontend to log errors such as datadog or sentry and something like pagerduty to notify the team when things go wrong in production
+
+for deployments I would suggest using a CI for testing, automated builds and deployments, something like github actions or gitlab CI if we need more control, CI would watch for commits to a master branch and run a pipeline thats checks out the latest changes, runs the tests and builds a the application, the container can be pushed to a container registry to make it easy to quickly roll back to previous versions that are tested and are able to run straight away
