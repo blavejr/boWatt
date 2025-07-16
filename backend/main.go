@@ -76,6 +76,7 @@ func main() {
 			c.JSON(200, gin.H{"username": user.Username, "created_at": user.CreatedAt})
 		})
 		router.POST("/upload", filesControllers.HandleFileUpload)
+		router.POST("/uploads", filesControllers.HandleMultipleFileUpload)
 		router.GET("/files", filesControllers.ListFilesForUser)
 		router.POST("/query", queriesControllers.HandleQuery)
 		router.GET("/query/history", queriesControllers.QueryHistoryForUser)

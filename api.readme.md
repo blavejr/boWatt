@@ -127,6 +127,37 @@ file: <file>
     "message": "You already uploaded this file"
 }
 ```
+---
+
+### `POST /uploads`
+
+Upload multiple files (requires auth).
+**Headers**:
+
+```
+Authorization: <token>
+```
+
+**Form Data**:
+
+```
+files: <file>,<file>,<file>,<file>...
+```
+
+```json
+{
+    "failed": null,
+    "message": "Upload completed",
+    "skipped": null,
+    "uploaded": [
+        "file1.txt",
+        "file2.txt",
+        "file3.txt",
+        "file4.txt"
+        ...
+    ]
+}
+```
 
 ---
 

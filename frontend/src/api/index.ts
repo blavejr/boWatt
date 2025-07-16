@@ -32,6 +32,32 @@ export async function uploadFile(file: File): Promise<void> {
 }
 
 /**
+ * Uploads multiple text files to the backend.
+ * @param files Array of File objects to upload.
+ */
+export async function uploadFiles(files: File[]): Promise<void> {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  const res = await fetch(`${BASE_URL}/uploads`, {
+    method: "POST",
+    headers: {
+      Authorization: `${localStorage.getItem("token")}`,
+    },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Failed to upload files");
+  }
+}
+
+
+/**
  * Sends a search query to the backend for a specific file.
  * @param FileHash FileHash of the uploaded file.
  * @param query Search term.

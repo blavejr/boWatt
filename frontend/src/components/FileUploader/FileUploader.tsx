@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { uploadFile } from "../../api";
+import { uploadFiles } from "../../api";
 import './FileUploader.css';
 
 interface FileUploaderProps {
@@ -14,28 +14,36 @@ export default function FileUploader({ onUpload, setError }: FileUploaderProps) 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      if (!isTxtFile(file)) {
-        setError("Only .txt files are allowed.");
-        return;
-      }
-      setError(null);
-      await uploadFile(file);
-      onUpload(file.name);
+    const files = Array.from(e.dataTransfer.files).filter(isTxtFile);
+
+    if (files.length === 0) {
+      setError("Only .txt files are allowed.");
+      return;
+    }
+
+    setError(null);
+    try {
+      await uploadFiles(files);
+      files.forEach(file => onUpload(file.name));
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
   const handleFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!isTxtFile(file)) {
-        setError("Only .txt files are allowed.");
-        return;
-      }
-      setError(null);
-      await uploadFile(file);
-      onUpload(file.name);
+    const files = Array.from(e.target.files || []).filter(isTxtFile);
+
+    if (files.length === 0) {
+      setError("Only .txt files are allowed.");
+      return;
+    }
+
+    setError(null);
+    try {
+      await uploadFiles(files);
+      files.forEach(file => onUpload(file.name));
+    } catch (err: any) {
+      setError(err.message);
     }
   };
 
@@ -49,8 +57,8 @@ export default function FileUploader({ onUpload, setError }: FileUploaderProps) 
       }}
       onDragLeave={() => setDragOver(false)}
     >
-      <p>Drag and drop a .txt file here, or</p>
-      <input type="file" accept=".txt" onChange={handleFileInput} />
+      <p>Drag and drop .txt files here, or</p>
+      <input type="file" accept=".txt" multiple onChange={handleFileInput} />
     </div>
   );
 }
