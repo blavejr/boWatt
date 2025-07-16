@@ -50,7 +50,7 @@ export default function FileUploader({ onUpload, setError }: FileUploaderProps) 
       onDragLeave={() => setDragOver(false)}
     >
       <p>Drag and drop a .txt file here, or</p>
-      <input type="file" onChange={handleFileInput} />
+      <input type="file" accept=".txt" onChange={handleFileInput} />
     </div>
   );
 }
