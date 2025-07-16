@@ -6,7 +6,7 @@ Here’s a high-level overview of its structure and responsibilities:
 
 ## 1. Web Framework & Entry Point
 
-- **Framework:** Uses [Gin](https://github.com/gin-gonic/gin) for HTTP routing and middleware.
+- **Framework:** Uses Gin for HTTP routing and middleware.
 - **Entry Point:** `main.go`
   - Sets up logging
   - Connects to MongoDB
