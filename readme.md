@@ -61,6 +61,9 @@ Authorization: <token>
 # Architecture
 To keep it simple I have gone with a basic implementation of the MVC architecture, models, views and controller, for a more complex programs I would recommend going with onion/ports and adapters as its much more adaptable
 
+# Tests
+I have added some unit tests for both the frontend and the back end
+
 much more detail can be found in the other readme
 - [api.readme](./api.readme.md)
 - [architecture.readme](./architecture.readme.md)
