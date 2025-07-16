@@ -134,3 +134,25 @@ export async function getQueryHistory(): Promise<IQueryHistory[]>{
   const data = await res.json();
   return data;
 }
+
+export interface IUserProfile {
+    "created_at": number,
+    "username": string
+}
+
+export async function getUserProfile(): Promise<IUserProfile>{
+  const res = await fetch(`${BASE_URL}/profile`, {
+    method: "GET",
+    headers: {
+      "Authorization": `${localStorage.getItem("token")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Failed to get user profile");
+  }
+
+  const data = await res.json();
+  return data;
+}

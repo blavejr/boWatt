@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getQueryHistory, healthCheck, IQueryHistory, listFiles, queryFile } from "../../api";
+import { getQueryHistory, getUserProfile, healthCheck, IQueryHistory, IUserProfile, listFiles, queryFile } from "../../api";
 import FileList from "../../components/FileList/FileList";
 import FileUploader from "../../components/FileUploader/FileUploader";
 import Search from "../../components/Search/Search";
@@ -17,6 +17,11 @@ function Home() {
   const [userFiles, setUserFiles] = useState<any>([]);
   const [queryHistory, setQueryHistory] = useState<IQueryHistory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState<IUserProfile>({
+    created_at: new Date().getTime(),
+    username: 'loading'
+  })
+
   const debouncedQuery = useDebounce(searchQuery, 500);
 
   const navigate = useNavigate()
@@ -24,14 +29,17 @@ function Home() {
 useEffect(() => {
   const loadData = async () => {
     try {
-      const [_, files, history] = await Promise.all([
+      const [_, files, history, user] = await Promise.all([
         healthCheck(),
         listFiles(),
         getQueryHistory(),
+        getUserProfile(),
       ]);
+      
       setHealthCheckStatus("Backend is healthy");
       setUserFiles(files);
       setQueryHistory(history);
+      setLoggedInUser(user);
     } catch (err) {
       setHealthCheckStatus("Backend is not healthy");
       setError("Failed to load data. Make sure the backend is running.");
@@ -85,7 +93,7 @@ useEffect(() => {
     <div className="App">
       <header>
         <div className="header-text">
-          <h1>Welcome to the App</h1>
+          <h1>Welcome {loggedInUser?.username}</h1>
           <p>
             This is a simple application that lets you upload a text file and
             search it.
