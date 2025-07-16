@@ -100,6 +100,13 @@ Here’s a high-level overview of its structure and responsibilities:
 ### Validation
 I did not get to adding validation to the routes but this would be a good improvement, validation on both the frontend input, backend routes and on the database writes, simply to sanitize data and make sure that everything is getting what it needs in the shape that it needs it in.
 
-### Deployments
-Though I only imagine this app will only ever live on local computers I can think up how it could be deployed.
-Ideally I would go with a CI/CD approach, this would require that tests are written to enable automatic build and deployment with each commit/merge to a master branch. something like gitlab CI or github actions could be used here, the pipeline would checkout the code, build it and run the tests, if all passes, we could push the container into a registry before checking it out and deploying it onto the available infra.
+### Production environment
+The above is for demo purposes only and the architecture in a full scale production environment would be very much different, first I would use ports/adapters architecture for a cleaner code base on the backend, this architecture not only seperates concerns well but also allows us to very easily swap out parts of the program such as databases, caches, etc
+
+I would also seperate it into multiple services, auth service, file service and even a query service to further seperate concerns and decouple the project, that way if one part of it is down for any reason the rest stay up and are able to function.
+
+The in-memory cache would be replaced with a more robust persistant cache like redis and I would use something like elastic search to have better full text searches on the database
+
+for inter service communication I would use events and some kind of message broker like RabbitMQ or Kafka, this way services can go about their business and not have to worry about the others, once a service completes its job it simply sends an event to the broker notifying the next service where continue, how to get the data etc, files can be queued for hashing and even further processing to enhance the searchability
+
+I would also include observability tools on both the back and frontend to log errors such as datadog or sentry and something like pagerduty to notify the team when things go wrong in production 
