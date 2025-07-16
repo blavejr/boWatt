@@ -53,13 +53,14 @@ func main() {
 	usersControllers := controllers.NewUsersHandler(usersCollection)
 
 	router := gin.Default()
-
+	router.Use(middleware.ErrorHandler())
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
+	router.Use(middleware.AuthMiddleware(usersCollection))
 
 	router.GET("/ping", func(c *gin.Context) {
 		slog.Info("Health ping received")
@@ -68,8 +69,6 @@ func main() {
 
 	router.POST("/signup", usersControllers.CreateUser)
 	router.POST("/login", usersControllers.LoginUser)
-
-	router.Use(middleware.AuthMiddleware(usersCollection))
 	{
 		router.GET("/profile", func(c *gin.Context) {
 			user := c.MustGet("user").(models.User)
